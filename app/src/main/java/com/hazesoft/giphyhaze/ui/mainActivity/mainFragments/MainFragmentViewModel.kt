@@ -1,6 +1,8 @@
 package com.hazesoft.giphyhaze.ui.mainActivity.mainFragments
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.hazesoft.giphyhaze.model.GiphyGif
 import com.hazesoft.giphyhaze.repository.GifRepository
 import kotlinx.coroutines.*
 
@@ -10,12 +12,16 @@ import kotlinx.coroutines.*
  */
 class MainFragmentViewModel: ViewModel() {
 
-    val gifRepository = GifRepository()
+    private val gifRepository = GifRepository()
 
-    var job: Job? = null
+    private var job: Job? = null
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         println("error: ${throwable.message}")
     }
+
+
+    val trendingList = MutableLiveData<ArrayList<GiphyGif>>(ArrayList())
+
 
 
 
@@ -24,7 +30,18 @@ class MainFragmentViewModel: ViewModel() {
         job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
             val response = gifRepository.getTrendingGifs()
             withContext(Dispatchers.Main){
-                println("success?")
+                val tempList = ArrayList<GiphyGif>()
+                response.body()?.data?.forEach {
+                    tempList.add(
+                        GiphyGif(
+                            it.id,
+                            it.images.downsized_small.mp4,
+                            Math.random().toInt() % 2 == 0    //to simulate fav
+                        )
+                    )
+                }
+
+                trendingList.value = tempList
             }
         }
     }

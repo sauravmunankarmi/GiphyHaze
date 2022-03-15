@@ -3,11 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidProjects/GiphyHaze/app/src/main/res/drawable/button_layout.xml" value="0.121" />
         <entry key="..\:/AndroidProjects/GiphyHaze/app/src/main/res/drawable/splash_background.xml" value="0.181" />
         <entry key="..\:/AndroidProjects/GiphyHaze/app/src/main/res/layout/activity_main.xml" value="0.21851851851851853" />
         <entry key="..\:/AndroidProjects/GiphyHaze/app/src/main/res/layout/activity_splash.xml" value="0.25" />
+        <entry key="..\:/AndroidProjects/GiphyHaze/app/src/main/res/layout/button_layout.xml" value="0.10989583333333333" />
         <entry key="..\:/AndroidProjects/GiphyHaze/app/src/main/res/layout/fragment_favorites.xml" value="0.25" />
         <entry key="..\:/AndroidProjects/GiphyHaze/app/src/main/res/layout/fragment_main.xml" value="0.25" />
+        <entry key="..\:/AndroidProjects/GiphyHaze/app/src/main/res/layout/item_giphy_gif.xml" value="0.631578947368421" />
       </map>
     </option>
   </component>

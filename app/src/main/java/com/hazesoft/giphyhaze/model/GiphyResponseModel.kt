@@ -1,7 +1,7 @@
 package com.hazesoft.giphyhaze.model
 
 data class GiphyResponseModel(
-    val `data`: List<Data>,
+    val `data`: ArrayList<Data>,
     val meta: Meta,
     val pagination: Pagination
 ) {

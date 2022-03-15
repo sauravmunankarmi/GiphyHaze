@@ -10,4 +10,6 @@
 
     <color name="light_grey">#FFBBBBBB</color>
     <color name="dark_grey">#FF666666</color>
+    <color name="light_pink">#FFFFB0EF</color>
+    <color name="dark_pink">#FFE50076</color>
 </resources>
