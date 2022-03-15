@@ -61,8 +61,10 @@ class FavoritesFragment : Fragment(), GiphyGifListAdapter.OnFavoriteToggleClicke
         }
     }
 
-    override fun onFavClicked(giphyGif: GiphyGif) {
-        viewModel.removeFavoriteGiphyGifFromDb(giphyGif)
+    override fun onFavClicked(giphyGif: GiphyGif, type: String) {
+        if(type == "grid"){
+            viewModel.removeFavoriteGiphyGifFromDb(giphyGif)
+        }
     }
 
 

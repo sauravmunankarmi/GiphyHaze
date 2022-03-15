@@ -60,9 +60,10 @@ class MainFragment : Fragment(), GiphyGifListAdapter.OnFavoriteToggleClicked {
         }
     }
 
-    override fun onFavClicked(giphyGif: GiphyGif) {
-        println("ON FAV CLICKED: giphy: ${giphyGif}")
-        viewModel.favToggle(giphyGif)
+    override fun onFavClicked(giphyGif: GiphyGif, type: String) {
+        if(type == "linear"){
+            viewModel.favToggle(giphyGif)
+        }
     }
 
     override fun onDestroyView() {

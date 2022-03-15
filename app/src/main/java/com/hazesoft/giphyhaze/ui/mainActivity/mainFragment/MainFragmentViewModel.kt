@@ -1,11 +1,14 @@
 package com.hazesoft.giphyhaze.ui.mainActivity.mainFragment
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.*
 import com.hazesoft.giphyhaze.db.FavoriteGiphyGif
 import com.hazesoft.giphyhaze.model.GiphyGif
 import com.hazesoft.giphyhaze.repository.GifRepository
 import com.hazesoft.giphyhaze.util.App
 import kotlinx.coroutines.*
+import java.util.stream.Collectors
 import kotlin.random.Random
 
 /**
@@ -20,12 +23,13 @@ class MainFragmentViewModel(private val gifRepository: GifRepository): ViewModel
     private var job: Job? = null
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         println("error: ${throwable.message}")
-        message.value = throwable.message
+        message.postValue(throwable.message)
     }
 
 
 
     private val giphyGifApiList = MutableLiveData<ArrayList<GiphyGif>>(ArrayList())
+
     var giphyGifDisplayList :LiveData<ArrayList<GiphyGif>> = Transformations.map(gifRepository.allFavoritesGiphyGif.asLiveData()){ favGiphyDbList ->
         val tempList = giphyGifApiList.value
         favGiphyDbList.forEach { favGiphy ->
@@ -42,7 +46,7 @@ class MainFragmentViewModel(private val gifRepository: GifRepository): ViewModel
 
 
     fun getTrendingGif() {
-        giphyGifDisplayList.value?.clear()
+//        giphyGifDisplayList.value?.clear()
         job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
             val response = gifRepository!!.getTrendingGifs()
             withContext(Dispatchers.Main) {

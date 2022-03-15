@@ -108,8 +108,8 @@ class GiphyGifListAdapter(private val context: Context, private val listener: On
         }
 
         holder.favToggle.setOnClickListener {
-            listener.onFavClicked(localGiphyGif)
-            localGiphyGif.isFavorite = !localGiphyGif.isFavorite
+            listener.onFavClicked(localGiphyGif, type)
+//            localGiphyGif.isFavorite = !localGiphyGif.isFavorite
 
         }
 
@@ -120,7 +120,7 @@ class GiphyGifListAdapter(private val context: Context, private val listener: On
     }
 
     interface OnFavoriteToggleClicked{
-        fun onFavClicked(giphyGif: GiphyGif)
+        fun onFavClicked(giphyGif: GiphyGif, type: String)
     }
 
 }
