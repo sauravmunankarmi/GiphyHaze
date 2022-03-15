@@ -1,4 +1,4 @@
-package com.hazesoft.giphyhaze.ui.mainActivity.mainFragments
+package com.hazesoft.giphyhaze.ui.mainActivity.mainFragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,12 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.hazesoft.giphyhaze.R
 import com.hazesoft.giphyhaze.adapter.GiphyGifListAdapter
 import com.hazesoft.giphyhaze.databinding.FragmentMainBinding
 import com.hazesoft.giphyhaze.model.GiphyGif
+import com.hazesoft.giphyhaze.util.App
 
 
 class MainFragment : Fragment(), GiphyGifListAdapter.OnFavoriteToggleClicked {
@@ -34,7 +32,7 @@ class MainFragment : Fragment(), GiphyGifListAdapter.OnFavoriteToggleClicked {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(this).get(MainFragmentViewModel::class.java)
+        viewModel = ViewModelProvider(this, MainFragmentViewModelFactory((requireActivity().application as App).repository)).get(MainFragmentViewModel::class.java)
 
         setupUI()
         observeViewModel()

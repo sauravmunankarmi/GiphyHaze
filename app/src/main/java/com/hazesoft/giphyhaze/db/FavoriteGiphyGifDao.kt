@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Created by Saurav
@@ -16,7 +17,7 @@ interface FavoriteGiphyGifDao {
     suspend fun insertFavoriteGiphyGif(favoriteGiphyGif: FavoriteGiphyGif)
 
     @Query("SELECT * FROM favorite_giphy_gif_table")
-    suspend fun getAllFavoriteGiphyGif(): List<FavoriteGiphyGif>
+    fun getAllFavoriteGiphyGif(): Flow<List<FavoriteGiphyGif>>
 
     @Query("DELETE FROM favorite_giphy_gif_table WHERE giphy_id = :giphyId")
     suspend fun deleteFavoriteGiphyGifByGiphyId(giphyId: String)

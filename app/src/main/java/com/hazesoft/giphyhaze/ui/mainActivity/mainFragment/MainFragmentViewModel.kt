@@ -1,4 +1,4 @@
-package com.hazesoft.giphyhaze.ui.mainActivity.mainFragments
+package com.hazesoft.giphyhaze.ui.mainActivity.mainFragment
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,9 +12,7 @@ import kotlin.random.Random
  * Created by Saurav
  * on 3/15/2022
  */
-class MainFragmentViewModel: ViewModel() {
-
-    private val gifRepository = App.repository
+class MainFragmentViewModel(private val gifRepository: GifRepository): ViewModel() {
 
     val isLoading = MutableLiveData<Boolean>(true)
     val message = MutableLiveData<String>()

@@ -1,4 +1,4 @@
-package com.hazesoft.giphyhaze.ui.mainActivity.mainFragments
+package com.hazesoft.giphyhaze.ui.mainActivity.favoriteFragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,11 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.hazesoft.giphyhaze.R
 import com.hazesoft.giphyhaze.adapter.GiphyGifListAdapter
 import com.hazesoft.giphyhaze.databinding.FragmentFavoritesBinding
 import com.hazesoft.giphyhaze.model.GiphyGif
+import com.hazesoft.giphyhaze.ui.mainActivity.mainFragment.MainFragmentViewModel
+import com.hazesoft.giphyhaze.ui.mainActivity.mainFragment.MainFragmentViewModelFactory
 import com.hazesoft.giphyhaze.util.App
 
 
@@ -34,12 +34,12 @@ class FavoritesFragment : Fragment(), GiphyGifListAdapter.OnFavoriteToggleClicke
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(requireActivity()).get(FavoritesFragmentViewModel::class.java)
+        viewModel = ViewModelProvider(this, FavoritesFragmentViewModelFactory((requireActivity().application as App).repository)).get(
+            FavoritesFragmentViewModel::class.java)
 
         setupUI()
         observeViewModel()
 
-        viewModel.getAllFavoriteGiphyGif()
     }
 
     private fun setupUI(){
@@ -53,7 +53,7 @@ class FavoritesFragment : Fragment(), GiphyGifListAdapter.OnFavoriteToggleClicke
     }
 
     private fun observeViewModel(){
-        viewModel.favoriteGiphyGifList.observe(requireActivity()) {favGifList ->
+        viewModel.favoriteGiphyGifDisplayList.observe(requireActivity()) {favGifList ->
             favGifList?.let{
                 giphyGifAdapter.differ.submitList(favGifList)
                 giphyGifAdapter.notifyDataSetChanged()
@@ -65,20 +65,7 @@ class FavoritesFragment : Fragment(), GiphyGifListAdapter.OnFavoriteToggleClicke
 
     }
 
-    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
-        super.setUserVisibleHint(isVisibleToUser)
-        if (isVisibleToUser) {
-            // Refresh tab data:
-            if (requireActivity().supportFragmentManager != null) {
-                requireActivity().supportFragmentManager
-                    .beginTransaction()
-                    .detach(this)
-                    .attach(this)
-                    .commit();
-            }
-        }
 
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()

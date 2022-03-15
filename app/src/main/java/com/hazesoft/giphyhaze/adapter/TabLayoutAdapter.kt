@@ -3,8 +3,8 @@ package com.hazesoft.giphyhaze.adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import com.hazesoft.giphyhaze.ui.mainActivity.mainFragments.FavoritesFragment
-import com.hazesoft.giphyhaze.ui.mainActivity.mainFragments.MainFragment
+import com.hazesoft.giphyhaze.ui.mainActivity.favoriteFragment.FavoritesFragment
+import com.hazesoft.giphyhaze.ui.mainActivity.mainFragment.MainFragment
 
 /**
  * Created by Saurav

@@ -1,11 +1,13 @@
 package com.hazesoft.giphyhaze.repository
 
+import androidx.lifecycle.LiveData
 import com.hazesoft.giphyhaze.api.ApiInterface
 import com.hazesoft.giphyhaze.db.FavoriteGiphyGif
 import com.hazesoft.giphyhaze.db.FavoriteGiphyGifDao
 import com.hazesoft.giphyhaze.model.GiphyGif
 import com.hazesoft.giphyhaze.util.App
 import com.hazesoft.giphyhaze.util.Constants
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Created by Saurav
@@ -17,14 +19,14 @@ class GifRepository(private val favoriteGiphyGifDao: FavoriteGiphyGifDao) {
 
     suspend fun getTrendingGifs() = apiInterface.getTrendingGifs(Constants.GIPHY_API_KEY)
 
-    suspend fun getAllFavoriteGiphyGif() = App.database!!.favoriteGiphyGifDao().getAllFavoriteGiphyGif()
+    val allFavoritesGiphyGif: Flow<List<FavoriteGiphyGif>> = favoriteGiphyGifDao.getAllFavoriteGiphyGif()
 
-    suspend fun addFavoriteGiphyGif(giphyGif: GiphyGif) = App.database!!.favoriteGiphyGifDao().insertFavoriteGiphyGif(
+    suspend fun addFavoriteGiphyGif(giphyGif: GiphyGif) = favoriteGiphyGifDao.insertFavoriteGiphyGif(
         FavoriteGiphyGif(
             giphyGif.giphyId,
             giphyGif.giphyGifUrl,
         )
     )
 
-    suspend fun removeFavoriteGiphyGif(giphyGif: GiphyGif) = App.database!!.favoriteGiphyGifDao().deleteFavoriteGiphyGifByGiphyId(giphyGif.giphyId)
+    suspend fun removeFavoriteGiphyGif(giphyGif: GiphyGif) = favoriteGiphyGifDao.deleteFavoriteGiphyGifByGiphyId(giphyGif.giphyId)
 }
