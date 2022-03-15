@@ -15,19 +15,20 @@ class MainFragmentViewModel: ViewModel() {
 
     private val gifRepository = GifRepository()
 
+    val isLoading = MutableLiveData<Boolean>(true)
+    val message = MutableLiveData<String>()
+
     private var job: Job? = null
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         println("error: ${throwable.message}")
+        message.value = throwable.message
     }
 
 
     val trendingList = MutableLiveData<ArrayList<GiphyGif>>(ArrayList())
 
 
-
-
     fun getTrendingGif(){
-        println("start")
         job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
             val response = gifRepository.getTrendingGifs()
             withContext(Dispatchers.Main){
