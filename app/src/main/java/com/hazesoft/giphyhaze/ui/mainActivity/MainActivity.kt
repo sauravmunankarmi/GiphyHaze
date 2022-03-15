@@ -5,6 +5,7 @@ import android.os.Bundle
 import com.google.android.material.tabs.TabLayout
 import com.hazesoft.giphyhaze.R
 import com.hazesoft.giphyhaze.adapter.TabLayoutAdapter
+import com.hazesoft.giphyhaze.api.ApiInterface
 import com.hazesoft.giphyhaze.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
