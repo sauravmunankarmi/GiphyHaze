@@ -35,25 +35,11 @@ class FavoritesFragmentViewModel(private val gifRepository: GifRepository): View
         message.value = throwable.message
     }
 
-//    fun getAllFavoriteGiphyGif(){
-//        isLoading.postValue(true)
-//
-//        val job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
-//            val favoriteGifDbList = gifRepository!!.getAllFavoriteGiphyGif()
-//            Dispatchers.Main{
-//                val tempList = ArrayList<GiphyGif>()
-//                favoriteGifDbList.forEach {
-//                    tempList.add(
-//                        GiphyGif(
-//                            it.giphyId,
-//                            it.giphyGifUrl,
-//                            true
-//                        )
-//                    )
-//                }
-//
-//                favoriteGiphyGifList.value = tempList
-//            }
-//        }
-//    }
+    fun removeFavoriteGiphyGifFromDb(giphyGif: GiphyGif){
+        val job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
+            gifRepository!!.removeFavoriteGiphyGif(giphyGif)
+        }
+    }
+
+
 }

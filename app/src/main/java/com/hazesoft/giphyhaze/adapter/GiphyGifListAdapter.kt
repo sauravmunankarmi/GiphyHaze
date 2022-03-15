@@ -95,6 +95,7 @@ class GiphyGifListAdapter(private val context: Context, private val listener: On
                 holder.favToggle.setCompoundDrawablesWithIntrinsicBounds(null, null, drawable, null)
             }else{
                 holder.favToggle.text = "Remove"
+                holder.favToggle.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
             }
 
             holder.favToggle.background.setColorFilter(Color.parseColor(holder.itemView.context.resources.getString(R.color.dark_grey)), PorterDuff.Mode.SRC_ATOP)

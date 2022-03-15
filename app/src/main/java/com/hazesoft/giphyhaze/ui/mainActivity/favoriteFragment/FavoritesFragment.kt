@@ -62,7 +62,7 @@ class FavoritesFragment : Fragment(), GiphyGifListAdapter.OnFavoriteToggleClicke
     }
 
     override fun onFavClicked(giphyGif: GiphyGif) {
-
+        viewModel.removeFavoriteGiphyGifFromDb(giphyGif)
     }
 
 

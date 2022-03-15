@@ -51,7 +51,7 @@ class MainFragment : Fragment(), GiphyGifListAdapter.OnFavoriteToggleClicked {
 
 
     private fun observeViewModel(){
-        viewModel.trendingList.observe(requireActivity()) { giphyGifList ->
+        viewModel.giphyGifDisplayList.observe(requireActivity()) { giphyGifList ->
             giphyGifList?.let{
                 giphyGifAdapter.differ.submitList(giphyGifList)
                 giphyGifAdapter?.notifyDataSetChanged()

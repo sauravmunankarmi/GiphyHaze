@@ -1,7 +1,7 @@
 package com.hazesoft.giphyhaze.ui.mainActivity.mainFragment
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
+import com.hazesoft.giphyhaze.db.FavoriteGiphyGif
 import com.hazesoft.giphyhaze.model.GiphyGif
 import com.hazesoft.giphyhaze.repository.GifRepository
 import com.hazesoft.giphyhaze.util.App
@@ -24,26 +24,50 @@ class MainFragmentViewModel(private val gifRepository: GifRepository): ViewModel
     }
 
 
-    val trendingList = MutableLiveData<ArrayList<GiphyGif>>(ArrayList())
+
+    private val giphyGifApiList = MutableLiveData<ArrayList<GiphyGif>>(ArrayList())
+    var giphyGifDisplayList :LiveData<ArrayList<GiphyGif>> = Transformations.map(gifRepository.allFavoritesGiphyGif.asLiveData()){ favGiphyDbList ->
+        val tempList = giphyGifApiList.value
+        favGiphyDbList.forEach { favGiphy ->
+            favGiphy?.let {
+                tempList?.forEach {
+                    it.isFavorite = it.giphyId == favGiphy.giphyId
+                }
+            }
+        }
+
+        giphyGifApiList.value = tempList!!
+        return@map tempList
+    }
 
 
-    fun getTrendingGif(){
+    fun getTrendingGif() {
+        giphyGifDisplayList.value?.clear()
         job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
             val response = gifRepository!!.getTrendingGifs()
-            withContext(Dispatchers.Main){
+            withContext(Dispatchers.Main) {
+//                val favoriteGiphyGifDbList: List<FavoriteGiphyGif>? =
+//                    gifRepository.allFavoritesGiphyGif.asLiveData().value
                 val tempList = ArrayList<GiphyGif>()
                 response.body()?.data?.forEach {
+                    println("counter")
                     tempList.add(
                         GiphyGif(
                             it.id,
-                            it.images.downsized.url,
-                            Random.nextBoolean()    //to simulate fav
+                            it.images.downsized.url?:"",
+                            false
                         )
                     )
                 }
 
-                trendingList.value = tempList
+                giphyGifApiList.value = tempList
+                giphyGifDisplayList = giphyGifApiList
+
+
             }
+//            withContext(Dispatchers.IO){
+//
+//            }
         }
     }
 

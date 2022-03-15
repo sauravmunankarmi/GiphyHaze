@@ -48,8 +48,6 @@
                 tools:text="Add to favorites"
                 android:textSize="12sp"
                 android:textColor="@color/white"
-                tools:drawableEnd="@drawable/ic_baseline_favorite_24"
-                android:drawableTint="@color/white"
                 tools:backgroundTint="@color/light_pink"
                 android:drawablePadding="8dp"
                 android:background="@drawable/button_layout"
