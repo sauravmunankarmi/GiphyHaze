@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.hazesoft.giphyhaze.model.GiphyGif
 import com.hazesoft.giphyhaze.repository.GifRepository
 import kotlinx.coroutines.*
+import kotlin.random.Random
 
 /**
  * Created by Saurav
@@ -35,8 +36,8 @@ class MainFragmentViewModel: ViewModel() {
                     tempList.add(
                         GiphyGif(
                             it.id,
-                            it.images.downsized_small.mp4,
-                            Math.random().toInt() % 2 == 0    //to simulate fav
+                            it.images.downsized.url,
+                            Random.nextBoolean()    //to simulate fav
                         )
                     )
                 }

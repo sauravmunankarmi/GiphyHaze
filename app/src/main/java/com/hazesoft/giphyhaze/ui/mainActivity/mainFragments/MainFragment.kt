@@ -39,8 +39,6 @@ class MainFragment : Fragment() {
         observeViewModel()
         viewModel.getTrendingGif()
 
-
-
     }
 
     private fun setupUI(){

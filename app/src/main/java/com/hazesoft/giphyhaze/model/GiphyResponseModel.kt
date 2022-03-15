@@ -1,5 +1,7 @@
 package com.hazesoft.giphyhaze.model
 
+import com.google.gson.annotations.SerializedName
+
 data class GiphyResponseModel(
     val `data`: ArrayList<Data>,
     val meta: Meta,
@@ -53,7 +55,8 @@ data class GiphyResponseModel(
         )
 
         data class Images(
-            val `480w_still`: WStill,
+            @SerializedName("480w_still")
+            val w_still: WStill,
             val `4k`: K,
             val downsized: Downsized,
             val downsized_large: DownsizedLarge,
