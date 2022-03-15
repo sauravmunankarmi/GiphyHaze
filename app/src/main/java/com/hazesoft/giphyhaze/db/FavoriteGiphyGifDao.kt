@@ -1,6 +1,5 @@
 package com.hazesoft.giphyhaze.db
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -17,7 +16,7 @@ interface FavoriteGiphyGifDao {
     suspend fun insertFavoriteGiphyGif(favoriteGiphyGif: FavoriteGiphyGif)
 
     @Query("SELECT * FROM favorite_giphy_gif_table")
-    suspend fun getAllFavoriteGiphyGif(): LiveData<List<FavoriteGiphyGif>>
+    suspend fun getAllFavoriteGiphyGif(): List<FavoriteGiphyGif>
 
     @Query("DELETE FROM favorite_giphy_gif_table WHERE giphy_id = :giphyId")
     suspend fun deleteFavoriteGiphyGifByGiphyId(giphyId: String)

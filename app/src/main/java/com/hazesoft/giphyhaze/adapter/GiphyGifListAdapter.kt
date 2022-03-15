@@ -30,7 +30,7 @@ import com.hazesoft.giphyhaze.model.GiphyGif
  * Created by Saurav
  * on 3/15/2022
  */
-class GiphyGifListAdapter(private val context: Context):
+class GiphyGifListAdapter(private val context: Context, private val listener: OnFavoriteToggleClicked, private val type: String):
     RecyclerView.Adapter<GiphyGifListAdapter.ViewHolder>() {
 
     private val layoutInflater = LayoutInflater.from(context)
@@ -56,8 +56,14 @@ class GiphyGifListAdapter(private val context: Context):
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val itemView = layoutInflater.inflate(R.layout.item_giphy_gif, parent, false)
-        return ViewHolder(itemView)
+        // slightly diff layout for diff rv
+        return if(type == "linear"){
+            val itemView = layoutInflater.inflate(R.layout.item_giphy_gif, parent, false)
+            ViewHolder(itemView)
+        }else{
+            val itemView = layoutInflater.inflate(R.layout.item_giphy_gif_grid, parent, false)
+            ViewHolder(itemView)
+        }
     }
 
     @SuppressLint("ResourceType")
@@ -82,9 +88,15 @@ class GiphyGifListAdapter(private val context: Context):
             .into(holder.gifView)
 
         if(localGiphyGif.isFavorite){
-            holder.favToggle.text = "Remove from Favorites"
-            val drawable = ContextCompat.getDrawable(context, R.drawable.ic_baseline_favorite_24)
-            holder.favToggle.setCompoundDrawablesWithIntrinsicBounds(null, null, drawable, null)
+
+            if(type == "linear"){
+                holder.favToggle.text = "Remove from Favorites"
+                val drawable = ContextCompat.getDrawable(context, R.drawable.ic_baseline_favorite_24)
+                holder.favToggle.setCompoundDrawablesWithIntrinsicBounds(null, null, drawable, null)
+            }else{
+                holder.favToggle.text = "Remove"
+            }
+
             holder.favToggle.background.setColorFilter(Color.parseColor(holder.itemView.context.resources.getString(R.color.dark_grey)), PorterDuff.Mode.SRC_ATOP)
 
         }else{
@@ -94,10 +106,20 @@ class GiphyGifListAdapter(private val context: Context):
             holder.favToggle.background.setColorFilter(Color.parseColor(holder.itemView.context.resources.getString(R.color.light_pink)), PorterDuff.Mode.SRC_ATOP)
         }
 
+        holder.favToggle.setOnClickListener {
+            listener.onFavClicked(localGiphyGif)
+            localGiphyGif.isFavorite = !localGiphyGif.isFavorite
+
+        }
+
     }
 
     override fun getItemCount(): Int {
         return differ.currentList.size
+    }
+
+    interface OnFavoriteToggleClicked{
+        fun onFavClicked(giphyGif: GiphyGif)
     }
 
 }

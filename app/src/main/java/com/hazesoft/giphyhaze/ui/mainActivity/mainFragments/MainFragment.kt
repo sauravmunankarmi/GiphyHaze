@@ -12,9 +12,10 @@ import com.bumptech.glide.Glide
 import com.hazesoft.giphyhaze.R
 import com.hazesoft.giphyhaze.adapter.GiphyGifListAdapter
 import com.hazesoft.giphyhaze.databinding.FragmentMainBinding
+import com.hazesoft.giphyhaze.model.GiphyGif
 
 
-class MainFragment : Fragment() {
+class MainFragment : Fragment(), GiphyGifListAdapter.OnFavoriteToggleClicked {
 
     private lateinit var viewModel: MainFragmentViewModel
     private var _binding: FragmentMainBinding? = null
@@ -43,7 +44,7 @@ class MainFragment : Fragment() {
 
     private fun setupUI(){
 
-        giphyGifAdapter = GiphyGifListAdapter(requireContext())
+        giphyGifAdapter = GiphyGifListAdapter(requireContext(), this, "linear")
         binding.rvGiphyGif.apply {
             adapter = giphyGifAdapter
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -61,9 +62,10 @@ class MainFragment : Fragment() {
         }
     }
 
-
-
-
+    override fun onFavClicked(giphyGif: GiphyGif) {
+        println("ON FAV CLICKED: giphy: ${giphyGif}")
+        viewModel.favToggle(giphyGif)
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
