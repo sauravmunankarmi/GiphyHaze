@@ -10,24 +10,26 @@ import com.hazesoft.giphyhaze.ui.mainActivity.mainFragment.MainFragment
  * Created by Saurav
  * on 3/15/2022
  */
-class TabLayoutAdapter(private val fragmentManager: FragmentManager,
-                       private val totalItem: Int,): FragmentPagerAdapter(fragmentManager) {
+class TabLayoutAdapter(
+    fragmentManager: FragmentManager,
+    private val totalItem: Int,): FragmentPagerAdapter(fragmentManager) {
+
     override fun getCount(): Int {
         return totalItem
     }
 
     override fun getItem(position: Int): Fragment {
-        when(position){
+        return when(position){
             0 -> {
-                return MainFragment()
+                MainFragment()
             }
 
             1 -> {
-                return FavoritesFragment()
+                FavoritesFragment()
             }
 
             else -> {
-                return MainFragment()
+                MainFragment()
             }
         }
     }

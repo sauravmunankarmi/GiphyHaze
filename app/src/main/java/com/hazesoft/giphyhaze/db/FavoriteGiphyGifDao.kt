@@ -13,12 +13,14 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface FavoriteGiphyGifDao {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertFavoriteGiphyGif(favoriteGiphyGif: FavoriteGiphyGif)
 
+    //flow method to observe db change
     @Query("SELECT * FROM favorite_giphy_gif_table")
     fun getAllFavoriteGiphyGif(): Flow<List<FavoriteGiphyGif>>
 
+    //normal method to get favList
     @Query("SELECT * FROM favorite_giphy_gif_table")
     suspend fun getAllFavoriteGiphyGifList(): List<FavoriteGiphyGif>
 

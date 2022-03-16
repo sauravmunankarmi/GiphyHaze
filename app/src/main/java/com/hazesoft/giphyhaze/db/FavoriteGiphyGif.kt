@@ -2,6 +2,7 @@ package com.hazesoft.giphyhaze.db
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 /**
@@ -9,8 +10,14 @@ import androidx.room.PrimaryKey
  * on 3/15/2022
  */
 
-@Entity(tableName = "favorite_giphy_gif_table")
+@Entity(tableName = "favorite_giphy_gif_table", indices = arrayOf(
+    Index(
+        value = ["giphy_id", "giphy_gif_url"],
+        unique = true
+    )
+))
 class FavoriteGiphyGif(
+
     @ColumnInfo(name = "giphy_id")
     val giphyId: String,
     @ColumnInfo(name = "giphy_gif_url")

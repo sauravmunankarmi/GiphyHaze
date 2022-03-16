@@ -1,11 +1,12 @@
 package com.hazesoft.giphyhaze.ui.mainActivity.favoriteFragment
 
 import androidx.lifecycle.*
-import com.hazesoft.giphyhaze.db.FavoriteGiphyGif
 import com.hazesoft.giphyhaze.model.GiphyGif
 import com.hazesoft.giphyhaze.repository.GifRepository
-import com.hazesoft.giphyhaze.util.App
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 /**
  * Created by Saurav
@@ -15,7 +16,7 @@ class FavoritesFragmentViewModel(private val gifRepository: GifRepository): View
 
     val message = MutableLiveData<String>()
 
-    //transforming livedata list of "FavoriteGiphyGif" from db to livedata list of "GiphyGif"
+    //transforming livedata list of "FavoriteGiphyGif" (LiveData<List<FavoriteGiphyGif>>) from db to livedata list of "GiphyGif" (LiveData<List<GiphyGif>>) for recycler view adapter
     val favoriteGiphyGifDisplayList: LiveData<List<GiphyGif>> = Transformations.map(gifRepository.allFavoritesGiphyGif.asLiveData()){ it ->
         val tempList = ArrayList<GiphyGif>()
         it.forEach {
@@ -35,10 +36,9 @@ class FavoritesFragmentViewModel(private val gifRepository: GifRepository): View
     }
 
     fun removeFavoriteGiphyGifFromDb(giphyGif: GiphyGif){
-        val job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
-            gifRepository!!.removeFavoriteGiphyGif(giphyGif)
+        CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
+            gifRepository.removeFavoriteGiphyGif(giphyGif)
         }
     }
-
 
 }
