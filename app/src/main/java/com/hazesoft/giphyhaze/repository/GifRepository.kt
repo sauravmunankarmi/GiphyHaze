@@ -30,15 +30,28 @@ class GifRepository(private val favoriteGiphyGifDao: FavoriteGiphyGifDao) {
         ),
         pagingSourceFactory = {
             GiphyGifPagingSource(
-                apiInterface,
-                ""
+                apiInterface
             )
         }
 
     ).liveData
 
+    fun getSearchedGifs(searchString: String) = Pager(
+        config = PagingConfig(
+            pageSize = 10,
+            maxSize = 40,
+            enablePlaceholders = false
+        ),
+        pagingSourceFactory = {
+            SearchedGiphyGifPagingSource(
+                apiInterface,
+                searchString
+            )
+        }
 
-    suspend fun getSearchedGifs(searchString: String) = apiInterface.getSearchedGifs(Constants.GIPHY_API_KEY, searchString, 20)
+    ).liveData
+
+//    suspend fun getSearchedGifs(searchString: String) = apiInterface.getSearchedGifs(Constants.GIPHY_API_KEY, searchString, 20)
 
     val allFavoritesGiphyGif: Flow<List<FavoriteGiphyGif>> = favoriteGiphyGifDao.getAllFavoriteGiphyGif()
 

@@ -17,8 +17,9 @@ import retrofit2.HttpException
 
 private const val GIPHY_GIF_STARTING_PAGE_OFFSET = 0
 private const val GIPHY_GIF_PAGE_LIMIT = 10
-class GiphyGifPagingSource(
+class SearchedGiphyGifPagingSource(
     private val apiInterface: ApiInterface,
+    private val query: String
 ): PagingSource<Int, GiphyResponseModel.Data>() {
 
 
@@ -26,8 +27,9 @@ class GiphyGifPagingSource(
         val position = params.key ?: GIPHY_GIF_STARTING_PAGE_OFFSET
 
         try{
-            val response = apiInterface.getTrendingGifs(
+            val response = apiInterface.getSearchedGifs(
                 Constants.GIPHY_API_KEY,
+                query,
                 GIPHY_GIF_PAGE_LIMIT,
                 position
             )

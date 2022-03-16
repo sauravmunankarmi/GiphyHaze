@@ -103,7 +103,9 @@ class MainFragment : Fragment(), GiphyGifListAdapter.OnFavoriteToggleClicked {
 
         viewModel.favGiphyGifDbList.observe(requireActivity()) { favDbList ->
             favDbList?.let{
-                viewModel.updateFavGifOfCurrentList()
+//                viewModel.updateFavGifOfCurrentList()
+                viewModel.reloadLastSearch()
+
             }
         }
     }

@@ -26,7 +26,8 @@ interface ApiInterface {
     suspend fun getSearchedGifs(
         @Query("api_key") apiKey: String,
         @Query("q") searchKeyword: String,
-        @Query("limit") limit: Int
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int,
     ): Response<GiphyResponseModel>
 
     companion object {

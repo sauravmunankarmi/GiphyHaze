@@ -12,6 +12,7 @@ import com.hazesoft.giphyhaze.repository.GifRepository
 import com.hazesoft.giphyhaze.util.App
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.map
+import okhttp3.internal.wait
 import java.util.stream.Collectors
 import kotlin.random.Random
 
@@ -21,10 +22,11 @@ import kotlin.random.Random
  */
 class MainFragmentViewModel(private val gifRepository: GifRepository): ViewModel() {
 
-    val isLoading = MutableLiveData<Boolean>(false)
+    val isLoading = MutableLiveData<Boolean>(true)
     val message = MutableLiveData<String>()
 
-    private var job: Job? = null
+    var latestSearchString: String = ""
+
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         println("error: ${throwable.message}")
         isLoading.postValue(false)
@@ -33,23 +35,24 @@ class MainFragmentViewModel(private val gifRepository: GifRepository): ViewModel
 
     val favGiphyGifDbList: LiveData<List<FavoriteGiphyGif>> = gifRepository.allFavoritesGiphyGif.asLiveData()
 
-
     private val giphyGifApiList = MutableLiveData<ArrayList<GiphyGif>>(ArrayList())
-//    val favGiphyGifDbList: LiveData<List<FavoriteGiphyGif>> = gifRepository.allFavoritesGiphyGif.asLiveData()
-
-//    val giphyGifDisplayList = MutableLiveData<ArrayList<GiphyGif>>(ArrayList())
-
     val favIds = ArrayList<String>()
 
 
     init{
-        val job = CoroutineScope(Dispatchers.IO).launch {
-            gifRepository.allFavoritesGiphyGifList().forEach {
-                favIds.add(it.giphyId)
-            }
+        val job = CoroutineScope(Dispatchers.IO).launch{
+            getFavIdsFromDb()
         }
     }
 
+    suspend fun getFavIdsFromDb(){
+        favIds.clear()
+        runBlocking {
+                gifRepository.allFavoritesGiphyGifList().forEach {
+                    favIds.add(it.giphyId)
+                }
+        }
+    }
 
 
     private val queryString = MutableLiveData<String>()
@@ -57,125 +60,48 @@ class MainFragmentViewModel(private val gifRepository: GifRepository): ViewModel
     val giphyGifDisplayList: LiveData<PagingData<GiphyGif>>  = queryString.switchMap { queryString ->
 
         if(queryString.isNotEmpty()){
-            gifRepository.getTrendingGifs().cachedIn(viewModelScope).map { pagingData ->
+            val response = gifRepository.getSearchedGifs(queryString).cachedIn(viewModelScope).map { pagingData ->
                 pagingData.map {
                         giphyGif -> GiphyGif(giphyGif.id, giphyGif.images.downsized.url, giphyGif.id in favIds )
                 }
             }
+            isLoading.postValue(false)
+            response
         }else{
-            gifRepository.getTrendingGifs().cachedIn(viewModelScope).map { pagingData ->
+            val response = gifRepository.getTrendingGifs().cachedIn(viewModelScope).map { pagingData ->
                 pagingData.map {
                         giphyGif -> GiphyGif(giphyGif.id, giphyGif.images.downsized.url, giphyGif.id in favIds )
                 }
 
             }
+            isLoading.postValue(false)
+            response
         }
-
-
     }
 
 
 
 
     fun getGif(searchString: String){
-        if(searchString.isNullOrBlank()){
-            getTrendingGif()
-            queryString.value = ""
+        latestSearchString = searchString
+        if(searchString.isBlank()){
+            queryString.postValue("")
         }else{
-//            queryString.value = searchString
-            queryString.value = ""
-//            getSearchedGif(searchString)
+            queryString.postValue(searchString)
         }
     }
 
+    fun reloadLastSearch(){
 
-//    private fun getTrendingGif() {
-//        isLoading.postValue(true)
-//        job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
-//            val favIds = ArrayList<String>()
-//            gifRepository.allFavoritesGiphyGifList().forEach {
-//                favIds.add(it.giphyId)
-//            }
-//            println("favIds: ${favIds}")
-//            val response = gifRepository!!.getTrendingGifs()
-//            withContext(Dispatchers.Main) {
-//                if(response.isSuccessful){
-//                    val tempList = ArrayList<GiphyGif>()
-//                    response.body()?.data?.forEach {
-//                        tempList.add(
-//                            GiphyGif(
-//                                it.id,
-//                                it.images.downsized.url,
-//                                it.id in favIds
-//                            )
-//                        )
-//                        println("tempList : ${tempList}")
-//                    }
-//                    isLoading.postValue(false)
-//                    giphyGifDisplayList.value = tempList
-//                }else{
-//                    isLoading.postValue(false)
-//                    message.postValue("Unexpected error occurred while retrieving gif, please try again")
-//                }
-//
-//
-//            }
-//        }
-//    }
-
-    private fun getTrendingGif(){
-//        isLoading.postValue(true)
+        val job = CoroutineScope(Dispatchers.IO).launch {
+            getFavIdsFromDb()
+            Dispatchers.Main{
+                getGif(latestSearchString)
+            }
+        }
 
     }
 
-//    private fun getSearchedGif(searchString: String){
-//        isLoading.postValue(true)
-//        job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
-//            val favIds = ArrayList<String>()
-//            gifRepository.allFavoritesGiphyGifList().forEach {
-//                favIds.add(it.giphyId)
-//            }
-//            val response = gifRepository!!.getSearchedGifs(searchString)
-//            withContext(Dispatchers.Main) {
-//                if(response.isSuccessful){
-//                    val tempList = ArrayList<GiphyGif>()
-//                    response.body()?.data?.forEach {
-//                        tempList.add(
-//                            GiphyGif(
-//                                it.id,
-//                                it.images.downsized.url,
-//                                it.id in favIds
-//                            )
-//                        )
-//                        println("tempList : ${tempList}")
-//                    }
-//                    isLoading.postValue(false)
-//                    giphyGifDisplayList.value = tempList
-//                }else{
-//                    isLoading.postValue(false)
-//                    message.postValue("Unexpected error occurred while retrieving gif, please try again")
-//                }
-//
-//
-//            }
-//        }
-//    }
-
-
-
-    fun updateFavGifOfCurrentList(){
-//        val favIds = ArrayList<String>()
-//        favGiphyGifDbList.value?.forEach {
-//            favIds.add(it.giphyId)
-//        }
-//
-//        val temp = giphyGifDisplayList.value
-//        temp?.forEach {
-//            it.isFavorite = it.giphyId in favIds
-//        }
-//
-//        giphyGifDisplayList.value = temp ?: ArrayList()
-    }
 
     fun favToggle(giphyGif: GiphyGif){
 
