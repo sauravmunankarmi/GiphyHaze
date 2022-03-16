@@ -7,21 +7,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import com.hazesoft.giphyhaze.adapter.FavGiphyGifListAdapter
 import com.hazesoft.giphyhaze.adapter.GiphyGifListAdapter
 import com.hazesoft.giphyhaze.databinding.FragmentFavoritesBinding
 import com.hazesoft.giphyhaze.model.GiphyGif
-import com.hazesoft.giphyhaze.ui.mainActivity.mainFragment.MainFragmentViewModel
-import com.hazesoft.giphyhaze.ui.mainActivity.mainFragment.MainFragmentViewModelFactory
 import com.hazesoft.giphyhaze.util.App
 
 
-class FavoritesFragment : Fragment(), GiphyGifListAdapter.OnFavoriteToggleClicked {
+class FavoritesFragment : Fragment(), FavGiphyGifListAdapter.OnFavoriteToggleClicked {
 
     private lateinit var viewModel: FavoritesFragmentViewModel
     private var _binding: FragmentFavoritesBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var giphyGifAdapter: GiphyGifListAdapter
+    private lateinit var favGiphyGifAdapter: FavGiphyGifListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,9 +43,9 @@ class FavoritesFragment : Fragment(), GiphyGifListAdapter.OnFavoriteToggleClicke
 
     private fun setupUI(){
 
-        giphyGifAdapter = GiphyGifListAdapter(requireContext(), this, "grid")
+        favGiphyGifAdapter = FavGiphyGifListAdapter(requireContext(), this)
         binding.rvFavGiphyGif.apply {
-            adapter = giphyGifAdapter
+            adapter = favGiphyGifAdapter
             layoutManager = GridLayoutManager(requireContext(), 2)
         }
 
@@ -55,16 +54,16 @@ class FavoritesFragment : Fragment(), GiphyGifListAdapter.OnFavoriteToggleClicke
     private fun observeViewModel(){
         viewModel.favoriteGiphyGifDisplayList.observe(requireActivity()) {favGifList ->
             favGifList?.let{
-                giphyGifAdapter.differ.submitList(favGifList)
-                giphyGifAdapter.notifyDataSetChanged()
+                favGiphyGifAdapter.differ.submitList(favGifList)
+                favGiphyGifAdapter.notifyDataSetChanged()
             }
         }
     }
 
-    override fun onFavClicked(giphyGif: GiphyGif, type: String) {
-        if(type == "grid"){
-            viewModel.removeFavoriteGiphyGifFromDb(giphyGif)
-        }
+    override fun onFavClicked(giphyGif: GiphyGif) {
+
+        viewModel.removeFavoriteGiphyGifFromDb(giphyGif)
+
     }
 
 

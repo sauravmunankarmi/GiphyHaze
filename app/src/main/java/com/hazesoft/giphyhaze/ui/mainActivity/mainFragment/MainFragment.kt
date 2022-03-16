@@ -48,7 +48,7 @@ class MainFragment : Fragment(), GiphyGifListAdapter.OnFavoriteToggleClicked {
 
     private fun setupUI(){
 
-        giphyGifAdapter = GiphyGifListAdapter(requireContext(), this, "linear")
+        giphyGifAdapter = GiphyGifListAdapter(requireContext(), this)
         binding.rvGiphyGif.apply {
             adapter = giphyGifAdapter
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -108,10 +108,9 @@ class MainFragment : Fragment(), GiphyGifListAdapter.OnFavoriteToggleClicked {
         }
     }
 
-    override fun onFavClicked(giphyGif: GiphyGif, type: String) {
-        if(type == "linear"){
-            viewModel.favToggle(giphyGif)
-        }
+    override fun onFavClicked(giphyGif: GiphyGif) {
+        viewModel.favToggle(giphyGif)
+
     }
 
     override fun onDestroyView() {

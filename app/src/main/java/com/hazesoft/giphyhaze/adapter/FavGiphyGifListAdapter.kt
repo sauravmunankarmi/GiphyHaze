@@ -31,22 +31,23 @@ import com.hazesoft.giphyhaze.model.GiphyGif
  * Created by Saurav
  * on 3/15/2022
  */
-class GiphyGifListAdapter(private val context: Context, private val listener: OnFavoriteToggleClicked):
-    PagingDataAdapter<GiphyGif, GiphyGifListAdapter.ViewHolder>(differCallback) {
+class FavGiphyGifListAdapter(private val context: Context, private val listener: OnFavoriteToggleClicked):
+RecyclerView.Adapter<FavGiphyGifListAdapter.ViewHolder>() {
 
     private val layoutInflater = LayoutInflater.from(context)
 
-    companion object {
-        private val differCallback = object : DiffUtil.ItemCallback<GiphyGif>() {
-            override fun areItemsTheSame(oldItem: GiphyGif, newItem: GiphyGif): Boolean {
-                return oldItem.giphyId == newItem.giphyId
-            }
+    private val differCallback = object : DiffUtil.ItemCallback<GiphyGif>() {
+        override fun areItemsTheSame(oldItem: GiphyGif, newItem: GiphyGif): Boolean {
+            return oldItem.giphyId == newItem.giphyId
+        }
 
-            override fun areContentsTheSame(oldItem: GiphyGif, newItem: GiphyGif): Boolean {
-                return oldItem == newItem
-            }
+        override fun areContentsTheSame(oldItem: GiphyGif, newItem: GiphyGif): Boolean {
+            return oldItem == newItem
         }
     }
+
+    val differ = AsyncListDiffer(this, differCallback)
+
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val itemLayout = itemView.findViewById<ConstraintLayout>(R.id.cl_giphy_gif)
@@ -56,14 +57,15 @@ class GiphyGifListAdapter(private val context: Context, private val listener: On
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val itemView = layoutInflater.inflate(R.layout.item_giphy_gif, parent, false)
+
+        val itemView = layoutInflater.inflate(R.layout.item_giphy_gif_grid, parent, false)
         return ViewHolder(itemView)
 
     }
 
     @SuppressLint("ResourceType")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val localGiphyGif = getItem(position)
+        val localGiphyGif = differ.currentList.get(position)
 
         val circularProgressDrawable = CircularProgressDrawable(context)
         circularProgressDrawable.strokeWidth = 6f
@@ -74,17 +76,18 @@ class GiphyGifListAdapter(private val context: Context, private val listener: On
         requestOptions = requestOptions.transforms(CenterCrop(), RoundedCorners(64))
         requestOptions = requestOptions.placeholder(circularProgressDrawable)
 
+
         Glide.with(context)
             .asGif()
             .centerCrop()
             .apply(requestOptions)
-            .load(localGiphyGif?.giphyGifUrl)
+            .load(localGiphyGif.giphyGifUrl)
             .into(holder.gifView)
 
-        if(localGiphyGif?.isFavorite == true){
-            holder.favToggle.text = "Remove from Favorites"
-            val drawable = ContextCompat.getDrawable(context, R.drawable.ic_baseline_favorite_24)
-            holder.favToggle.setCompoundDrawablesWithIntrinsicBounds(null, null, drawable, null)
+        if(localGiphyGif.isFavorite){
+
+            holder.favToggle.text = "Remove"
+            holder.favToggle.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
             holder.favToggle.background.setColorFilter(Color.parseColor(holder.itemView.context.resources.getString(R.color.dark_grey)), PorterDuff.Mode.SRC_ATOP)
 
         }else{
@@ -95,14 +98,20 @@ class GiphyGifListAdapter(private val context: Context, private val listener: On
         }
 
         holder.favToggle.setOnClickListener {
-            listener.onFavClicked(localGiphyGif!!)
-
+            listener.onFavClicked(localGiphyGif)
         }
 
+    }
+
+    override fun getItemCount(): Int {
+        return differ.currentList.size
     }
 
     interface OnFavoriteToggleClicked{
         fun onFavClicked(giphyGif: GiphyGif)
     }
+
+
+
 
 }
