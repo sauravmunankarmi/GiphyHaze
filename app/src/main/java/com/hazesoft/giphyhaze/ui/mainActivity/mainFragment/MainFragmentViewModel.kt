@@ -36,11 +36,16 @@ class MainFragmentViewModel(private val gifRepository: GifRepository): ViewModel
     val giphyGifDisplayList = MutableLiveData<ArrayList<GiphyGif>>(ArrayList())
 
 
+    fun getGif(searchString: String){
+        if(searchString.isNullOrBlank()){
+            getTrendingGif()
+        }else{
+            getSearchedGif(searchString)
+        }
+    }
 
 
-
-
-    fun getTrendingGif() {
+    private fun getTrendingGif() {
         isLoading.postValue(true)
         job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
             val favIds = ArrayList<String>()
@@ -49,6 +54,39 @@ class MainFragmentViewModel(private val gifRepository: GifRepository): ViewModel
             }
             println("favIds: ${favIds}")
             val response = gifRepository!!.getTrendingGifs()
+            withContext(Dispatchers.Main) {
+                if(response.isSuccessful){
+                    val tempList = ArrayList<GiphyGif>()
+                    response.body()?.data?.forEach {
+                        tempList.add(
+                            GiphyGif(
+                                it.id,
+                                it.images.downsized.url,
+                                it.id in favIds
+                            )
+                        )
+                        println("tempList : ${tempList}")
+                    }
+                    isLoading.postValue(false)
+                    giphyGifDisplayList.value = tempList
+                }else{
+                    isLoading.postValue(false)
+                    message.postValue("Unexpected error occurred while retrieving gif, please try again")
+                }
+
+
+            }
+        }
+    }
+
+    private fun getSearchedGif(searchString: String){
+        isLoading.postValue(true)
+        job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
+            val favIds = ArrayList<String>()
+            gifRepository.allFavoritesGiphyGifList().forEach {
+                favIds.add(it.giphyId)
+            }
+            val response = gifRepository!!.getSearchedGifs(searchString)
             withContext(Dispatchers.Main) {
                 if(response.isSuccessful){
                     val tempList = ArrayList<GiphyGif>()

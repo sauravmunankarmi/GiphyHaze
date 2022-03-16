@@ -1,10 +1,12 @@
 package com.hazesoft.giphyhaze.ui.mainActivity.mainFragment
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
@@ -39,7 +41,7 @@ class MainFragment : Fragment(), GiphyGifListAdapter.OnFavoriteToggleClicked {
 
         setupUI()
         observeViewModel()
-        viewModel.getTrendingGif()
+        viewModel.getGif("")
 
     }
 
@@ -50,6 +52,19 @@ class MainFragment : Fragment(), GiphyGifListAdapter.OnFavoriteToggleClicked {
             adapter = giphyGifAdapter
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         }
+
+        binding.svSearchGif.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(p0: String?): Boolean {
+                viewModel.getGif(p0 ?: "")
+                return true
+            }
+
+            override fun onQueryTextChange(p0: String?): Boolean {
+                viewModel.getGif(p0 ?: "")
+                return true
+            }
+        })
+
     }
 
 
@@ -73,6 +88,7 @@ class MainFragment : Fragment(), GiphyGifListAdapter.OnFavoriteToggleClicked {
                     .show()
             }
         }
+
         viewModel.giphyGifDisplayList.observe(requireActivity()) { giphyGifList ->
             giphyGifList?.let{
                 giphyGifAdapter.differ.submitList(giphyGifList)

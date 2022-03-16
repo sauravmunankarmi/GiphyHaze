@@ -17,13 +17,15 @@ interface ApiInterface {
 
     @GET("trending")
     suspend fun getTrendingGifs(
-        @Query("api_key") apiKey: String
+        @Query("api_key") apiKey: String,
+        @Query("limit") limit: Int
     ): Response<GiphyResponseModel>
 
     @GET("search")
     suspend fun getSearchedGifs(
         @Query("api_key") apiKey: String,
-        @Query("q") searchKeyword: String
+        @Query("q") searchKeyword: String,
+        @Query("limit") limit: Int
     ): Response<GiphyResponseModel>
 
     companion object {

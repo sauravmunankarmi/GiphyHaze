@@ -5,7 +5,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clipToPadding="false"
     tools:context=".ui.mainActivity.mainFragment.MainFragment">
+
+    <SearchView
+        android:id="@+id/sv_search_gif"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:queryHint="Search for GIFs"
+        android:iconifiedByDefault="false"
+        app:queryHint="Search for GIFs"
+        android:background="@drawable/search_edit_text_background"
+        />
 
 
     <androidx.recyclerview.widget.RecyclerView
@@ -13,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sv_search_gif"
         />
 
     <ProgressBar
@@ -23,7 +38,9 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        android:indeterminateTint="@color/white"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

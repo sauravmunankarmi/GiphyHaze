@@ -17,7 +17,9 @@ class GifRepository(private val favoriteGiphyGifDao: FavoriteGiphyGifDao) {
 
     private val apiInterface = ApiInterface.create()
 
-    suspend fun getTrendingGifs() = apiInterface.getTrendingGifs(Constants.GIPHY_API_KEY)
+    suspend fun getTrendingGifs() = apiInterface.getTrendingGifs(Constants.GIPHY_API_KEY, 20)
+
+    suspend fun getSearchedGifs(searchString: String) = apiInterface.getSearchedGifs(Constants.GIPHY_API_KEY, searchString, 20)
 
     val allFavoritesGiphyGif: Flow<List<FavoriteGiphyGif>> = favoriteGiphyGifDao.getAllFavoriteGiphyGif()
 
