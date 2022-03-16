@@ -2,6 +2,7 @@ package com.hazesoft.giphyhaze.ui.mainActivity.mainFragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -60,7 +61,9 @@ class MainFragment : Fragment(), GiphyGifListAdapter.OnFavoriteToggleClicked {
             }
 
             override fun onQueryTextChange(p0: String?): Boolean {
-                viewModel.getGif(p0 ?: "")
+                if(TextUtils.isEmpty(p0)){
+                    viewModel.getGif("")
+                }
                 return true
             }
         })
