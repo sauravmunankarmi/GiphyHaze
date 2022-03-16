@@ -19,8 +19,8 @@ class GifRepository(private val favoriteGiphyGifDao: FavoriteGiphyGifDao) {
 
     fun getTrendingGifs() = Pager(
         config = PagingConfig(
-            pageSize = 10,
-            maxSize = 40,
+            pageSize = 25,
+            maxSize = 75,
             enablePlaceholders = false
         ),
         pagingSourceFactory = {
@@ -32,8 +32,8 @@ class GifRepository(private val favoriteGiphyGifDao: FavoriteGiphyGifDao) {
 
     fun getSearchedGifs(searchString: String) = Pager(
         config = PagingConfig(
-            pageSize = 10,
-            maxSize = 40,
+            pageSize = 25,
+            maxSize = 75,
             enablePlaceholders = false
         ),
         pagingSourceFactory = {

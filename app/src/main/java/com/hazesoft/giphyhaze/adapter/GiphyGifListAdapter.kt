@@ -71,6 +71,7 @@ class GiphyGifListAdapter(private val context: Context, private val listener: On
             .centerCrop()
             .apply(requestOptions)
             .load(localGiphyGif?.giphyGifUrl)
+            .error(R.drawable.ic_baseline_broken_image_24)
             .into(holder.gifView)
 
         if(localGiphyGif?.isFavorite == true){
