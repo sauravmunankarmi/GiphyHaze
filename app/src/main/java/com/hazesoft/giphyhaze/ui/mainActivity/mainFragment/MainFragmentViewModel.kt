@@ -34,19 +34,6 @@ class MainFragmentViewModel(private val gifRepository: GifRepository): ViewModel
     val giphyGifDisplayList = MutableLiveData<ArrayList<GiphyGif>>(ArrayList())
 
 
-//    var giphyGifDisplayList :LiveData<ArrayList<GiphyGif>> = Transformations.map(gifRepository.allFavoritesGiphyGif.asLiveData()){ favGiphyDbList ->
-//        val tempList = giphyGifApiList.value
-//        favGiphyDbList.forEach { favGiphy ->
-//            favGiphy?.let {
-//                tempList?.forEach {
-//                    it.isFavorite = it.giphyId == favGiphy.giphyId
-//                }
-//            }
-//        }
-//
-//        giphyGifApiList.value = tempList!!
-//        return@map tempList
-//    }
 
 
     fun getTrendingGif() {
