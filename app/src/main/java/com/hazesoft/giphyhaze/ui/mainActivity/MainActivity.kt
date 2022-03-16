@@ -1,11 +1,9 @@
 package com.hazesoft.giphyhaze.ui.mainActivity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.tabs.TabLayout
-import com.hazesoft.giphyhaze.R
 import com.hazesoft.giphyhaze.adapter.TabLayoutAdapter
-import com.hazesoft.giphyhaze.api.ApiInterface
 import com.hazesoft.giphyhaze.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -18,10 +16,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setupUI()
-        setOnClickListeners()
-        observeViewModel()
-
-
     }
 
     private fun setupUI(){
@@ -55,11 +49,4 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun setOnClickListeners(){
-
-    }
-
-    private fun observeViewModel(){
-
-    }
 }

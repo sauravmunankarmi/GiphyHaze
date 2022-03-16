@@ -1,13 +1,12 @@
 package com.hazesoft.giphyhaze.ui.mainActivity.mainFragment
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
@@ -15,8 +14,6 @@ import com.hazesoft.giphyhaze.adapter.GiphyGifListAdapter
 import com.hazesoft.giphyhaze.databinding.FragmentMainBinding
 import com.hazesoft.giphyhaze.model.GiphyGif
 import com.hazesoft.giphyhaze.util.App
-import android.widget.TextView
-import com.google.android.material.R
 
 
 class MainFragment : Fragment(), GiphyGifListAdapter.OnFavoriteToggleClicked {
@@ -54,22 +51,21 @@ class MainFragment : Fragment(), GiphyGifListAdapter.OnFavoriteToggleClicked {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         }
 
+        //search view listeners
         binding.svSearchGif.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(p0: String?): Boolean {
                 viewModel.getGif(p0 ?: "")
                 return true
             }
-
             override fun onQueryTextChange(p0: String?): Boolean {
                 if(TextUtils.isEmpty(p0)){
+                    //show trending list when search bar is empty/cleared
                     viewModel.getGif("")
                 }
                 return true
             }
         })
-
     }
-
 
     private fun observeViewModel(){
         viewModel.isLoading.observe(requireActivity()) {isLoading ->
@@ -94,25 +90,20 @@ class MainFragment : Fragment(), GiphyGifListAdapter.OnFavoriteToggleClicked {
 
         viewModel.giphyGifDisplayList.observe(viewLifecycleOwner) { giphyGifList ->
             giphyGifList?.let{
-                println("observer 9099: ${giphyGifList}")
                 giphyGifAdapter.submitData(viewLifecycleOwner.lifecycle, giphyGifList)
-//                giphyGifAdapter?.notifyDataSetChanged()
             }
-
         }
 
         viewModel.favGiphyGifDbList.observe(requireActivity()) { favDbList ->
             favDbList?.let{
-//                viewModel.updateFavGifOfCurrentList()
+                //when ever db is updated, trigger reload to show latest changes
                 viewModel.reloadLastSearch()
-
             }
         }
     }
 
     override fun onFavClicked(giphyGif: GiphyGif) {
         viewModel.favToggle(giphyGif)
-
     }
 
     override fun onDestroyView() {

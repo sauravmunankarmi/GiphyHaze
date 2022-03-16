@@ -15,14 +15,10 @@ abstract class FavoriteGiphyGifDatabase: RoomDatabase() {
     abstract fun favoriteGiphyGifDao() : FavoriteGiphyGifDao
 
     companion object {
-        // Singleton prevents multiple instances of database opening at the
-        // same time.
         @Volatile
         private var INSTANCE: FavoriteGiphyGifDatabase? = null
 
         fun getDatabase(context: Context): FavoriteGiphyGifDatabase {
-            // if the INSTANCE is not null, then return it,
-            // if it is, then create the database
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
@@ -30,7 +26,6 @@ abstract class FavoriteGiphyGifDatabase: RoomDatabase() {
                     "favorite_giphy_gif_database"
                 ).build()
                 INSTANCE = instance
-                // return instance
                 instance
             }
         }

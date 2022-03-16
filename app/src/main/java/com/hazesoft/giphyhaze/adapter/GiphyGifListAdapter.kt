@@ -2,7 +2,6 @@ package com.hazesoft.giphyhaze.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.view.LayoutInflater
@@ -10,16 +9,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.paging.PagingDataAdapter
-import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
-import com.bumptech.glide.RequestBuilder
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
@@ -49,16 +44,13 @@ class GiphyGifListAdapter(private val context: Context, private val listener: On
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val itemLayout = itemView.findViewById<ConstraintLayout>(R.id.cl_giphy_gif)
-        val gifView = itemView.findViewById<ImageView>(R.id.iv_giphy_gif)
-        val favToggle = itemView.findViewById<Button>(R.id.bt_giphy_gif_fav_toggle)
-
+        val gifView: ImageView = itemView.findViewById<ImageView>(R.id.iv_giphy_gif)
+        val favToggle: Button = itemView.findViewById<Button>(R.id.bt_giphy_gif_fav_toggle)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = layoutInflater.inflate(R.layout.item_giphy_gif, parent, false)
         return ViewHolder(itemView)
-
     }
 
     @SuppressLint("ResourceType")
@@ -96,7 +88,6 @@ class GiphyGifListAdapter(private val context: Context, private val listener: On
 
         holder.favToggle.setOnClickListener {
             listener.onFavClicked(localGiphyGif!!)
-
         }
 
     }
