@@ -49,4 +49,8 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    fun setCurrentTab(position: Int) {
+        binding.viewPager.currentItem = position
+    }
+
 }

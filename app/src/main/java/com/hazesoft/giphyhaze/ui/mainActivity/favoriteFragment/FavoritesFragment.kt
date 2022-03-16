@@ -53,6 +53,22 @@ class FavoritesFragment : Fragment(), FavGiphyGifListAdapter.OnFavoriteToggleCli
             favGifList?.let{
                 favGiphyGifAdapter.differ.submitList(favGifList)
                 favGiphyGifAdapter.notifyDataSetChanged()
+                if(favGifList.isEmpty()){
+
+//                    Snackbar.make(binding.root, "Oops!! Looks like yo do not have any favorite GIFs.", Snackbar.LENGTH_INDEFINITE)
+//                        .setAction("OK"){
+//                            (activity as MainActivity)?.setCurrentTab(0)  //go to home tab if no favorites
+//                        }
+//                        .show()
+
+                    binding.rvFavGiphyGif.visibility = View.GONE
+                    binding.tvFavMsg.visibility = View.VISIBLE
+                    binding.tvFavMsg.text = "No favorite GIFs.\nStart adding favorite gif from home tab :)"
+
+                }else{
+                    binding.rvFavGiphyGif.visibility = View.VISIBLE
+                    binding.tvFavMsg.visibility = View.GONE
+                }
             }
         }
 

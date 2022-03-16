@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface FavoriteGiphyGifDao {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertFavoriteGiphyGif(favoriteGiphyGif: FavoriteGiphyGif)
 
     //flow method to observe db change

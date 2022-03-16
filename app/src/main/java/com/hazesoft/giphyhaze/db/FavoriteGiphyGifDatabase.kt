@@ -10,7 +10,7 @@ import androidx.room.RoomDatabase
  * on 3/15/2022
  */
 
-@Database(entities = arrayOf(FavoriteGiphyGif::class), version = 1, exportSchema = true)
+@Database(entities = arrayOf(FavoriteGiphyGif::class), version = 2, exportSchema = true)
 abstract class FavoriteGiphyGifDatabase: RoomDatabase() {
     abstract fun favoriteGiphyGifDao() : FavoriteGiphyGifDao
 
@@ -24,7 +24,9 @@ abstract class FavoriteGiphyGifDatabase: RoomDatabase() {
                     context.applicationContext,
                     FavoriteGiphyGifDatabase::class.java,
                     "favorite_giphy_gif_database"
-                ).build()
+                )
+                    .fallbackToDestructiveMigration()
+                    .build()
                 INSTANCE = instance
                 instance
             }
