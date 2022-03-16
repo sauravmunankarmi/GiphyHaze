@@ -92,10 +92,11 @@ class MainFragment : Fragment(), GiphyGifListAdapter.OnFavoriteToggleClicked {
             }
         }
 
-        viewModel.giphyGifDisplayList.observe(requireActivity()) { giphyGifList ->
+        viewModel.giphyGifDisplayList.observe(viewLifecycleOwner) { giphyGifList ->
             giphyGifList?.let{
-                giphyGifAdapter.differ.submitList(giphyGifList)
-                giphyGifAdapter?.notifyDataSetChanged()
+                println("observer 9099: ${giphyGifList}")
+                giphyGifAdapter.submitData(viewLifecycleOwner.lifecycle, giphyGifList)
+//                giphyGifAdapter?.notifyDataSetChanged()
             }
 
         }

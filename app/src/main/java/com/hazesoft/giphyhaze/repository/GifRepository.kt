@@ -1,6 +1,9 @@
 package com.hazesoft.giphyhaze.repository
 
 import androidx.lifecycle.LiveData
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.liveData
 import com.hazesoft.giphyhaze.api.ApiInterface
 import com.hazesoft.giphyhaze.db.FavoriteGiphyGif
 import com.hazesoft.giphyhaze.db.FavoriteGiphyGifDao
@@ -17,7 +20,23 @@ class GifRepository(private val favoriteGiphyGifDao: FavoriteGiphyGifDao) {
 
     private val apiInterface = ApiInterface.create()
 
-    suspend fun getTrendingGifs() = apiInterface.getTrendingGifs(Constants.GIPHY_API_KEY, 20)
+//    suspend fun getTrendingGifs() = apiInterface.getTrendingGifs(Constants.GIPHY_API_KEY, 20)
+
+    fun getTrendingGifs() = Pager(
+        config = PagingConfig(
+            pageSize = 10,
+            maxSize = 40,
+            enablePlaceholders = false
+        ),
+        pagingSourceFactory = {
+            GiphyGifPagingSource(
+                apiInterface,
+                ""
+            )
+        }
+
+    ).liveData
+
 
     suspend fun getSearchedGifs(searchString: String) = apiInterface.getSearchedGifs(Constants.GIPHY_API_KEY, searchString, 20)
 

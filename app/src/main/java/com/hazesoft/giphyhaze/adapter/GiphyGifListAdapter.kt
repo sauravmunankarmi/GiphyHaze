@@ -12,6 +12,7 @@ import android.widget.Button
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -31,17 +32,19 @@ import com.hazesoft.giphyhaze.model.GiphyGif
  * on 3/15/2022
  */
 class GiphyGifListAdapter(private val context: Context, private val listener: OnFavoriteToggleClicked, private val type: String):
-    RecyclerView.Adapter<GiphyGifListAdapter.ViewHolder>() {
+    PagingDataAdapter<GiphyGif, GiphyGifListAdapter.ViewHolder>(differCallback) {
 
     private val layoutInflater = LayoutInflater.from(context)
 
-    private val differCallback = object : DiffUtil.ItemCallback<GiphyGif>() {
-        override fun areItemsTheSame(oldItem: GiphyGif, newItem: GiphyGif): Boolean {
-            return oldItem.giphyId == newItem.giphyId
-        }
+    companion object {
+        private val differCallback = object : DiffUtil.ItemCallback<GiphyGif>() {
+            override fun areItemsTheSame(oldItem: GiphyGif, newItem: GiphyGif): Boolean {
+                return oldItem.giphyId == newItem.giphyId
+            }
 
-        override fun areContentsTheSame(oldItem: GiphyGif, newItem: GiphyGif): Boolean {
-            return oldItem == newItem
+            override fun areContentsTheSame(oldItem: GiphyGif, newItem: GiphyGif): Boolean {
+                return oldItem == newItem
+            }
         }
     }
 
