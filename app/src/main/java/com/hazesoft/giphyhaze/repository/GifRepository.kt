@@ -21,6 +21,8 @@ class GifRepository(private val favoriteGiphyGifDao: FavoriteGiphyGifDao) {
 
     val allFavoritesGiphyGif: Flow<List<FavoriteGiphyGif>> = favoriteGiphyGifDao.getAllFavoriteGiphyGif()
 
+    suspend fun allFavoritesGiphyGifList() = favoriteGiphyGifDao.getAllFavoriteGiphyGifList()
+
     suspend fun addFavoriteGiphyGif(giphyGif: GiphyGif) = favoriteGiphyGifDao.insertFavoriteGiphyGif(
         FavoriteGiphyGif(
             giphyGif.giphyId,

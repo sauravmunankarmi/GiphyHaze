@@ -13,7 +13,6 @@ import kotlinx.coroutines.*
  */
 class FavoritesFragmentViewModel(private val gifRepository: GifRepository): ViewModel() {
 
-    val isLoading = MutableLiveData<Boolean>(true)
     val message = MutableLiveData<String>()
 
     //transforming livedata list of "FavoriteGiphyGif" from db to livedata list of "GiphyGif"

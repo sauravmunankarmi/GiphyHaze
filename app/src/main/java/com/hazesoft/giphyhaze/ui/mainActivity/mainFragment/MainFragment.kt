@@ -7,10 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.hazesoft.giphyhaze.adapter.GiphyGifListAdapter
 import com.hazesoft.giphyhaze.databinding.FragmentMainBinding
 import com.hazesoft.giphyhaze.model.GiphyGif
 import com.hazesoft.giphyhaze.util.App
+import android.widget.TextView
+import com.google.android.material.R
 
 
 class MainFragment : Fragment(), GiphyGifListAdapter.OnFavoriteToggleClicked {
@@ -36,7 +39,7 @@ class MainFragment : Fragment(), GiphyGifListAdapter.OnFavoriteToggleClicked {
 
         setupUI()
         observeViewModel()
-//        viewModel.getTrendingGif()
+        viewModel.getTrendingGif()
 
     }
 
@@ -51,6 +54,25 @@ class MainFragment : Fragment(), GiphyGifListAdapter.OnFavoriteToggleClicked {
 
 
     private fun observeViewModel(){
+        viewModel.isLoading.observe(requireActivity()) {isLoading ->
+            isLoading?.let{
+                if(isLoading){
+                    binding.loadingMainFrag.visibility = View.VISIBLE
+                    binding.rvGiphyGif.visibility = View.GONE
+                }else{
+                    binding.loadingMainFrag.visibility = View.GONE
+                    binding.rvGiphyGif.visibility = View.VISIBLE
+                }
+            }
+        }
+
+        viewModel.message.observe(requireActivity()) {msg ->
+            msg?.let{
+                Snackbar.make(binding.root, msg, Snackbar.LENGTH_INDEFINITE)
+                    .setAction("OK"){}
+                    .show()
+            }
+        }
         viewModel.giphyGifDisplayList.observe(requireActivity()) { giphyGifList ->
             giphyGifList?.let{
                 giphyGifAdapter.differ.submitList(giphyGifList)
@@ -61,7 +83,7 @@ class MainFragment : Fragment(), GiphyGifListAdapter.OnFavoriteToggleClicked {
 
         viewModel.favGiphyGifDbList.observe(requireActivity()) { favDbList ->
             favDbList?.let{
-                viewModel.getTrendingGif()
+                viewModel.updateFavGifOfCurrentList()
             }
         }
     }

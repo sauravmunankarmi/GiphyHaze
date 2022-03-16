@@ -19,6 +19,9 @@ interface FavoriteGiphyGifDao {
     @Query("SELECT * FROM favorite_giphy_gif_table")
     fun getAllFavoriteGiphyGif(): Flow<List<FavoriteGiphyGif>>
 
+    @Query("SELECT * FROM favorite_giphy_gif_table")
+    suspend fun getAllFavoriteGiphyGifList(): List<FavoriteGiphyGif>
+
     @Query("DELETE FROM favorite_giphy_gif_table WHERE giphy_id = :giphyId")
     suspend fun deleteFavoriteGiphyGifByGiphyId(giphyId: String)
 
