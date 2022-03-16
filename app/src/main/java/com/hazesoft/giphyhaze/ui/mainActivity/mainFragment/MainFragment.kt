@@ -36,7 +36,7 @@ class MainFragment : Fragment(), GiphyGifListAdapter.OnFavoriteToggleClicked {
 
         setupUI()
         observeViewModel()
-        viewModel.getTrendingGif()
+//        viewModel.getTrendingGif()
 
     }
 
@@ -57,6 +57,12 @@ class MainFragment : Fragment(), GiphyGifListAdapter.OnFavoriteToggleClicked {
                 giphyGifAdapter?.notifyDataSetChanged()
             }
 
+        }
+
+        viewModel.favGiphyGifDbList.observe(requireActivity()) { favDbList ->
+            favDbList?.let{
+                viewModel.getTrendingGif()
+            }
         }
     }
 

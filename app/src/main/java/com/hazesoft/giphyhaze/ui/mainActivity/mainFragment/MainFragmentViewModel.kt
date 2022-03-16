@@ -29,49 +29,60 @@ class MainFragmentViewModel(private val gifRepository: GifRepository): ViewModel
 
 
     private val giphyGifApiList = MutableLiveData<ArrayList<GiphyGif>>(ArrayList())
+    val favGiphyGifDbList: LiveData<List<FavoriteGiphyGif>> = gifRepository.allFavoritesGiphyGif.asLiveData()
 
-    var giphyGifDisplayList :LiveData<ArrayList<GiphyGif>> = Transformations.map(gifRepository.allFavoritesGiphyGif.asLiveData()){ favGiphyDbList ->
-        val tempList = giphyGifApiList.value
-        favGiphyDbList.forEach { favGiphy ->
-            favGiphy?.let {
-                tempList?.forEach {
-                    it.isFavorite = it.giphyId == favGiphy.giphyId
-                }
-            }
-        }
+    val giphyGifDisplayList = MutableLiveData<ArrayList<GiphyGif>>(ArrayList())
 
-        giphyGifApiList.value = tempList!!
-        return@map tempList
-    }
+
+//    var giphyGifDisplayList :LiveData<ArrayList<GiphyGif>> = Transformations.map(gifRepository.allFavoritesGiphyGif.asLiveData()){ favGiphyDbList ->
+//        val tempList = giphyGifApiList.value
+//        favGiphyDbList.forEach { favGiphy ->
+//            favGiphy?.let {
+//                tempList?.forEach {
+//                    it.isFavorite = it.giphyId == favGiphy.giphyId
+//                }
+//            }
+//        }
+//
+//        giphyGifApiList.value = tempList!!
+//        return@map tempList
+//    }
 
 
     fun getTrendingGif() {
-//        giphyGifDisplayList.value?.clear()
+        isLoading.postValue(true)
+        println("favGiphyGifDbList: ${favGiphyGifDbList}")
+
+        val favIds = ArrayList<String>()
+        favGiphyGifDbList.value?.forEach {
+            favIds.add(it.giphyId)
+        }
+
+        println("favIds: ${favIds}")
+
         job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
             val response = gifRepository!!.getTrendingGifs()
             withContext(Dispatchers.Main) {
-//                val favoriteGiphyGifDbList: List<FavoriteGiphyGif>? =
-//                    gifRepository.allFavoritesGiphyGif.asLiveData().value
+
                 val tempList = ArrayList<GiphyGif>()
+
                 response.body()?.data?.forEach {
-                    println("counter")
                     tempList.add(
                         GiphyGif(
                             it.id,
-                            it.images.downsized.url?:"",
-                            false
+                            it.images.downsized.url,
+                            it.id in favIds
                         )
                     )
+                    println("tempList : ${tempList}")
                 }
 
-                giphyGifApiList.value = tempList
-                giphyGifDisplayList = giphyGifApiList
+                giphyGifDisplayList.value = tempList
+
 
 
             }
-//            withContext(Dispatchers.IO){
-//
-//            }
+
         }
     }
 
